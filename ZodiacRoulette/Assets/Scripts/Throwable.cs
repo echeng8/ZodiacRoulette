@@ -30,7 +30,7 @@ public class Throwable : Grabable
         {
             if (throwVelocity > minVToThrow)
             {
-                //todo tweak direciton of this velocity vector so that the direction you're moving in affects the throw 
+                Vector3 throwDirection = (Vector3.forward + Vector3.)
                 GetComponent<Rigidbody>().AddForce(Vector3.forward * throwVelocity);
                 GetComponent<Rigidbody>().useGravity = true; 
                 grabbable = false;
