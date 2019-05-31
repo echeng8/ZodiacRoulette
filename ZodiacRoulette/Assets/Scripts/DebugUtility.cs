@@ -13,7 +13,7 @@ public class DebugUtility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey("Escape"))
+        if(Input.GetKey(KeyCode.Escape))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);    
         }
