@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Calls GameManager.activateSign(sign) when a ball is in the trigger for the specified time. 
+/// lasted edited: ec
 /// </summary>
 public class ZodiacBallTrigger : MonoBehaviour
 {
