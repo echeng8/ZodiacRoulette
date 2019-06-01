@@ -122,5 +122,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabbable: 1
-  maxThrowVelocity: 1000
+  maxThrowVelocity: 2000
   minVToThrow: 2
