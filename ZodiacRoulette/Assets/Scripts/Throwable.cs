@@ -30,8 +30,9 @@ public class Throwable : Grabable
         {
             if (throwVelocity > minVToThrow)
             {
-                //todo tweak direciton of this velocity vector so that the direction you're moving in affects the throw 
-                GetComponent<Rigidbody>().AddForce(Vector3.forward * throwVelocity);
+
+                Vector3 throwDirection = (Vector3.forward + (new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0))).normalized; 
+                GetComponent<Rigidbody>().AddForce(throwDirection * throwVelocity);
                 GetComponent<Rigidbody>().useGravity = true; 
                 grabbable = false;
             }
