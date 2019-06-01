@@ -15,6 +15,7 @@ public class DebugUtility : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Escape))
         {
+            Debug.Log("te"); 
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);    
         }
         

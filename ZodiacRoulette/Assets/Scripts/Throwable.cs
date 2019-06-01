@@ -21,7 +21,6 @@ public class Throwable : Grabable
     private void Update()
     {
         throwVelocity = Mathf.Clamp01((new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"))).magnitude) *  maxThrowVelocity;
-        Debug.Log(throwVelocity); 
     }
 
     private void OnMouseUp()

@@ -7,15 +7,27 @@ using UnityEngine;
 /// </summary>
 public class ZodiacBallTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Sign sign;
 
-    // Update is called once per frame
-    void Update()
+    float ballStayDuration = 0;
+
+    private void OnTriggerStay(Collider other)
     {
-        
+        if(other.CompareTag("Ball") && !GameManager.Instance.signActivated)
+        {
+            ballStayDuration += Time.deltaTime;  
+            if(ballStayDuration >= GameManager.Instance.signActivationSeconds)
+            {
+                GameManager.Instance.activateSign(sign);
+                ballStayDuration = 0; 
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Ball") && !GameManager.Instance.signActivated)
+        {
+            ballStayDuration = 0; 
+        }
     }
 }
