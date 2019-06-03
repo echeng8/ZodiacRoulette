@@ -29,7 +29,62 @@ public class GameManager : Singleton<GameManager>
     {
         //placeholder
         Debug.Log("LANDED ON: " + s);
-        signActivated = true; 
+        signActivated = true;
+
+		switch (s)
+		{
+			case Sign.Aquarius:
+				{
+					break;
+				}
+			case Sign.Aries:
+				{
+					break;
+				}
+			case Sign.Cancer:
+				{
+					break;
+				}
+			case Sign.Capricorn:
+				{
+					break;
+				}
+			case Sign.Gemini:
+				{
+					break;
+				}
+			case Sign.Leo:
+				{
+					break;
+				}
+			case Sign.Libra:
+				{
+					break;
+				}
+			case Sign.Pisces:
+				{
+					break;
+				}
+			case Sign.Sagittarius:
+				{
+					break;
+				}
+			case Sign.Scorpio:
+				{
+					break;
+				}
+			case Sign.Taurus:
+				{
+					break;
+				}
+			case Sign.Virgo:
+				{
+					break;
+				}
+			//default:
+				//print("Error GameManager.cs line 85");
+		}
+				
     } 
 
 }
