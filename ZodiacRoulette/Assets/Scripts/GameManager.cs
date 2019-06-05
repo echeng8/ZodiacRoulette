@@ -175,15 +175,20 @@ public class GameManager : Singleton<GameManager>
     IEnumerator IntroThrowSequence()
     {
         textParticles.gameObject.SetActive(true);
-
+        yield return new WaitForSeconds(1);
+        ParticleSystem ballParticle = GameObject.FindGameObjectWithTag("Ball").GetComponentInChildren<ParticleSystem>();
+        ballParticle.Play();
         while (questionCanvas.alpha > 0) //alpha is not 1
         {
-            questionCanvas.alpha -= Time.deltaTime / 8;
+            questionCanvas.alpha -= Time.deltaTime / 5;
             yield return null; // run this on the next opportunity of the next frame
         }
+
         textParticles.GetComponent<ParticleSystem>().Stop();
-        yield return Fader.instance.FadeOut(3);
+        ballParticle.Stop();
+        yield return Fader.instance.FadeOut(2);
         yield return new WaitForSeconds(1);
+
         environmentPlexus.SetActive(false);
         textParticles.gameObject.SetActive(false);
         yield return Fader.instance.FadeIn(2);
