@@ -13,25 +13,55 @@ public class Throwable : Grabable, IWillReset
     //note: pokeball in pogo has constant speed and follows the mouse at it; our version follows the mouse 1:1 - ec
     public float maxThrowVelocity, minVToThrow;
     public UnityEvent OnThrow;
+   
     Vector3 startingPosition;
     float throwVelocity;
 
+    [SerializeField] GameObject targeter;
+    [SerializeField] float timeTilRevealTargeter = 5f;
+    [SerializeField] float _timer = 0;
+    GameManager game;
+
+    [SerializeField] bool holding;
+
     private void Start()
     {
+        game = GameManager.Instance;
         startingPosition = transform.position;
     }
     private void Update()
     {
-        throwVelocity = Mathf.Clamp01((new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"))).magnitude) * maxThrowVelocity;
+
+        if(game.canThrow)
+        {
+            Vector2 inputVector = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            throwVelocity = Mathf.Clamp01((inputVector).magnitude) * maxThrowVelocity;
+            if(!holding)
+                _timer += Time.deltaTime;
+            if (_timer > timeTilRevealTargeter)
+            {
+                if (!targeter.activeInHierarchy)
+                    targeter.SetActive(true);
+            }
+        }
+        else if (targeter.activeInHierarchy)
+            targeter.SetActive(false);
+
+    }
+
+    private void OnMouseDown()
+    {
+        targeter.SetActive(false);
+        _timer = 0;
+        holding = true;
     }
 
     private void OnMouseUp()
     {
-        if (grabbable && GameManager.Instance.canThrow)
+        if (grabbable && game.canThrow)
         {
             if (throwVelocity > minVToThrow)
             {
-
                 Vector3 throwDirection = (transform.forward + (new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0))).normalized;
                 GetComponent<Rigidbody>().AddForce(throwDirection * throwVelocity);
                 GetComponent<Rigidbody>().useGravity = true;
@@ -41,6 +71,7 @@ public class Throwable : Grabable, IWillReset
             else
             {
                 transform.position = startingPosition;
+                holding = false;
             }
 
         }
