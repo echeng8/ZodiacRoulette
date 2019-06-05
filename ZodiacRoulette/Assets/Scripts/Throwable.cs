@@ -66,7 +66,7 @@ public class Throwable : Grabable, IWillReset
                 GetComponent<Rigidbody>().AddForce(throwDirection * throwVelocity);
                 GetComponent<Rigidbody>().useGravity = true;
                 grabbable = false;
-                OnThrow.Invoke();
+                //OnThrow.Invoke();
             }
             else
             {

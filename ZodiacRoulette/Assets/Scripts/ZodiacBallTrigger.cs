@@ -12,6 +12,14 @@ public class ZodiacBallTrigger : MonoBehaviour
 
     float ballStayDuration = 0;
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball") && GameManager.Instance.currentState == GameState.Throwing)
+        {
+            GetComponentInParent<Spin>().stopSpinning();
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if(other.CompareTag("Ball") && GameManager.Instance.currentState == GameState.Throwing)
