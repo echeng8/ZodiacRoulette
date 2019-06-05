@@ -29,9 +29,14 @@ public class GameManager : Singleton<GameManager>
 	public Canvas Libr;
 	public Canvas Scor;
 	public Canvas Sagi;
-	public Canvas Capr; 
+	public Canvas Capr;
 
+    [SerializeField] GameObject textParticles;
+    [SerializeField] GameObject environmentPlexus;
+    [SerializeField] CanvasGroup questionCanvas;
+    [SerializeField] Animator rouletteAnim;
 
+    bool introFlag = true;
     
 	private new void Awake()
     {
@@ -135,13 +140,20 @@ public class GameManager : Singleton<GameManager>
                     var go = FindObjectsOfType<MonoBehaviour>().OfType<IWillReset>();
                     foreach (IWillReset r in go)
                     {
-                        r.resetGameObject(); 
+                        r.resetGameObject();
+                        textParticles.SetActive(false);
                     }
                 }
                 GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(0);
                 break;
             case GameState.Throwing:
-                canThrow = true;
+                if (introFlag)
+                {
+                    StartCoroutine("IntroThrowSequence");
+                    introFlag = false;
+                }
+                else
+                    canThrow = true;
                 break;
             case GameState.Displaying:
                 //todo remove need for scene reloading and make this a variable reference
@@ -158,5 +170,25 @@ public class GameManager : Singleton<GameManager>
     public void switchState(int i)
     {
         switchState((GameState)i); 
+    }
+
+    IEnumerator IntroThrowSequence()
+    {
+        textParticles.gameObject.SetActive(true);
+
+        while (questionCanvas.alpha > 0) //alpha is not 1
+        {
+            questionCanvas.alpha -= Time.deltaTime / 8;
+            yield return null; // run this on the next opportunity of the next frame
+        }
+        textParticles.GetComponent<ParticleSystem>().Stop();
+        yield return Fader.instance.FadeOut(3);
+        yield return new WaitForSeconds(1);
+        environmentPlexus.SetActive(false);
+        textParticles.gameObject.SetActive(false);
+        yield return Fader.instance.FadeIn(2);
+        rouletteAnim.Play("DropRoulette");
+        yield return new WaitForSeconds(4);
+        canThrow = true;
     }
 }

@@ -27,7 +27,7 @@ public class Throwable : Grabable, IWillReset
 
     private void OnMouseUp()
     {
-        if (grabbable)
+        if (grabbable && GameManager.Instance.canThrow)
         {
             if (throwVelocity > minVToThrow)
             {
