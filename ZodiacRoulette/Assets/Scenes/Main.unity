@@ -242,6 +242,11 @@ PrefabInstance:
       propertyPath: ClampVelocityModule.magnitude.scalar
       value: 2.02
       objectReference: {fileID: 0}
+    - target: {fileID: 3167320545035806090, guid: a8a0e75bddc624845a1a72eacafad848,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8a0e75bddc624845a1a72eacafad848, type: 3}
 --- !u!1001 &241264400
@@ -1207,6 +1212,8 @@ MonoBehaviour:
   environmentPlexus: {fileID: 995148848}
   questionCanvas: {fileID: 2146960280}
   rouletteAnim: {fileID: 1343078787}
+  ballMatLit: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  ballMatDark: {fileID: 2100000, guid: 49923c94a2774a9479f3d13db06973d3, type: 2}
 --- !u!1 &2097419040 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3167320545035806088, guid: a8a0e75bddc624845a1a72eacafad848,
@@ -1226,7 +1233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 638135320}
-  force: 20
+  force: 10
 --- !u!1 &2146960274 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7285195034780643856, guid: 371197616de25b44ea1e554993d9608e,
@@ -11034,6 +11041,11 @@ PrefabInstance:
       propertyPath: _timer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2384638617572464315, guid: e8e9e556bda81b9429379dba5bc1aa47,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 49923c94a2774a9479f3d13db06973d3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8e9e556bda81b9429379dba5bc1aa47, type: 3}
 --- !u!1001 &6327069612522098590
@@ -11240,7 +11252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 413682732, guid: 371197616de25b44ea1e554993d9608e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6969395362694512703, guid: 371197616de25b44ea1e554993d9608e,
         type: 3}

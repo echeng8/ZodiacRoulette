@@ -35,6 +35,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject environmentPlexus;
     [SerializeField] CanvasGroup questionCanvas;
     [SerializeField] Animator rouletteAnim;
+    [SerializeField] Material ballMatLit;
+    [SerializeField] Material ballMatDark;
 
     bool introFlag = true;
     
@@ -175,20 +177,32 @@ public class GameManager : Singleton<GameManager>
     IEnumerator IntroThrowSequence()
     {
         textParticles.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1);
-        ParticleSystem ballParticle = GameObject.FindGameObjectWithTag("Ball").GetComponentInChildren<ParticleSystem>();
-        ballParticle.Play();
+        yield return new WaitForSeconds(5);
+        bool ballParticleFlag = false;
+        bool trailPlexusFlag = false;
+        ParticleSystem ballParticle = null;
+        GameObject ball = GameObject.FindGameObjectWithTag("Ball");
         while (questionCanvas.alpha > 0) //alpha is not 1
         {
             questionCanvas.alpha -= Time.deltaTime / 5;
+            if(questionCanvas.alpha < .75f && !ballParticleFlag)
+            {
+                ballParticle = ball.GetComponentInChildren<ParticleSystem>();
+                ballParticle.Play();
+                ballParticleFlag = true;
+            }
+            if(questionCanvas.alpha < .25f && !trailPlexusFlag)
+            {
+                textParticles.GetComponent<ParticleSystem>().Stop();
+                trailPlexusFlag = true;
+            }
             yield return null; // run this on the next opportunity of the next frame
         }
 
-        textParticles.GetComponent<ParticleSystem>().Stop();
         ballParticle.Stop();
         yield return Fader.instance.FadeOut(2);
         yield return new WaitForSeconds(1);
-
+        ball.GetComponent<MeshRenderer>().material = ballMatLit;
         environmentPlexus.SetActive(false);
         textParticles.gameObject.SetActive(false);
         yield return Fader.instance.FadeIn(2);
