@@ -1214,6 +1214,7 @@ MonoBehaviour:
   rouletteAnim: {fileID: 1343078787}
   ballMatLit: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   ballMatDark: {fileID: 2100000, guid: 49923c94a2774a9479f3d13db06973d3, type: 2}
+  roulette: {fileID: 1343078786}
 --- !u!1 &2097419040 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3167320545035806088, guid: a8a0e75bddc624845a1a72eacafad848,
@@ -11029,7 +11030,7 @@ PrefabInstance:
     - target: {fileID: 2384638617572464318, guid: e8e9e556bda81b9429379dba5bc1aa47,
         type: 3}
       propertyPath: grabbable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2384638617572464318, guid: e8e9e556bda81b9429379dba5bc1aa47,
         type: 3}

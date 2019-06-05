@@ -38,12 +38,20 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Material ballMatLit;
     [SerializeField] Material ballMatDark;
 
+    [SerializeField] GameObject roulette;
+    Vector3 roulettePos;
+
     bool introFlag = true;
     
 	private new void Awake()
     {
         base.Awake();
         currentState = GameState.Asking;  
+    }
+
+    private void Start()
+    {
+        roulettePos = roulette.transform.position;
     }
 
 
@@ -138,6 +146,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.Asking:
                 if (currentState != state)  //restarting
                 {
+                    StopAllCoroutines();
                     OnGameRestart.Invoke();
                     var go = FindObjectsOfType<MonoBehaviour>().OfType<IWillReset>();
                     foreach (IWillReset r in go)
@@ -145,8 +154,16 @@ public class GameManager : Singleton<GameManager>
                         r.resetGameObject();
                         textParticles.SetActive(false);
                     }
+                    environmentPlexus.SetActive(true);
+                    rouletteAnim.Play("Empty");
+                    roulette.transform.position = roulettePos;
+                    GameObject ball = GameObject.FindGameObjectWithTag("Ball");
+                    ball.GetComponent<MeshRenderer>().material = ballMatDark;
+                    ball.GetComponent<Throwable>().grabbable = false;
+                    ball.GetComponentInChildren<ParticleSystem>().Stop();
+                    introFlag = true;
                 }
-                GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(0);
+                //GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(0);
                 break;
             case GameState.Throwing:
                 if (introFlag)
@@ -209,5 +226,6 @@ public class GameManager : Singleton<GameManager>
         rouletteAnim.Play("DropRoulette");
         yield return new WaitForSeconds(4);
         canThrow = true;
+        ball.GetComponent<Throwable>().grabbable = true;
     }
 }
