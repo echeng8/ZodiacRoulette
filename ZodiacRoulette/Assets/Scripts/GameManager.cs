@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Linq;
 
 public enum Sign {Aquarius, Pisces, Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn}
+public enum GameState {Asking, Throwing, Displaying} 
 
 public class GameManager : Singleton<GameManager>
 {
     /// <summary>
     /// How many seconds must be the ball remain in the sign triggers for them to activate? 
     /// </summary>
-    public int signActivationSeconds; 
-    public bool signActivated = false;
-    public UnityEvent gameReset;
+    public int signActivationSeconds;
+    public bool canThrow;
+    public GameState currentState;  
+    public UnityEvent OnGameRestart;
 
 	public Canvas Aqua;
 	public Canvas Pisc;
@@ -21,32 +24,29 @@ public class GameManager : Singleton<GameManager>
 	public Canvas Taur;
 	public Canvas Gemi;
 	public Canvas Canc;
-	public Canvas Leo_;
+	public Canvas Leo;
 	public Canvas Virg;
 	public Canvas Libr;
 	public Canvas Scor;
 	public Canvas Sagi;
-	public Canvas Capr;
+	public Canvas Capr; 
 
+
+    
 	private new void Awake()
     {
-        base.Awake();  
+        base.Awake();
+        currentState = GameState.Asking;  
     }
 
-    public void resetGame()
-    {
-        signActivated = false;
-        gameReset.Invoke();  
-    }
 
     public void activateSign(Sign s)
     {
         //placeholder
         Debug.Log("LANDED ON: " + s);
-        signActivated = true;
+        switchState(GameState.Displaying); 
 
-		switch (s) //I feel like this could be done in an
-				//array but idk how arrays work in C#
+		switch (s)
 		{
 			case Sign.Aquarius:
 				{
@@ -80,8 +80,8 @@ public class GameManager : Singleton<GameManager>
 				}
 			case Sign.Leo:
 				{
-					if (Leo_ != null)
-						Leo_.enabled = true;
+					if (Leo != null)
+						Leo.enabled = true;
 					break;
 				}
 			case Sign.Libra:
@@ -120,10 +120,43 @@ public class GameManager : Singleton<GameManager>
 						Virg.enabled = true;
 					break;
 				}
-				//default:
-				//print("Error GameManager.cs line 85");
 		}
 
 	} 
 
+    public void switchState(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Asking:
+                if (currentState != state)  //restarting
+                {
+                    OnGameRestart.Invoke();
+                    var go = FindObjectsOfType<MonoBehaviour>().OfType<IWillReset>();
+                    foreach (IWillReset r in go)
+                    {
+                        r.resetGameObject(); 
+                    }
+                }
+                GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(0);
+                break;
+            case GameState.Throwing:
+                canThrow = true;
+                break;
+            case GameState.Displaying:
+                //todo remove need for scene reloading and make this a variable reference
+                GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(2); 
+                break; 
+        }
+        currentState = state;
+    }
+
+    /// <summary>
+    /// Sets the state by index (0 - Asking, 1 - Throwing, 2 - Displaying) 
+    /// </summary>
+    /// <param name="state"></param>
+    public void switchState(int i)
+    {
+        switchState((GameState)i); 
+    }
 }

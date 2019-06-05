@@ -6,7 +6,7 @@ using UnityEngine;
 /// Spins the GameObject along the y-axis 
 /// -last edited: ec
 /// </summary>
-public class Spin : MonoBehaviour
+public class Spin : MonoBehaviour, IWillReset
 {
     [SerializeField] float spinSpeed, secToStop;
 
@@ -18,29 +18,36 @@ public class Spin : MonoBehaviour
     void Start()
     {
 
-        //Fetch the Rigidbody from the GameObject with this script attached
-        m_Rigidbody = GetComponentInChildren<Rigidbody>();
+        
+        m_Rigidbody = GetComponentInChildren<Rigidbody>();//Fetch the Rigidbody from the GameObject with this script attached
 
-        //calculates the speedDecayRate based on secToStop
-        speedDecayRate = spinSpeed / secToStop;
+
+        speed = spinSpeed; 
+        speedDecayRate = spinSpeed / secToStop;//calculates the speedDecayRate based on secToStop
     }
 
     void FixedUpdate()
     {
         if (stopped)
         {
-            if (spinSpeed > 0)
-                spinSpeed -= speedDecayRate * Time.deltaTime;
+            if (speed > 0)
+                speed -= speedDecayRate * Time.deltaTime;
             else
-                spinSpeed = 0; 
+                speed = 0; 
         }
 
-        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, spinSpeed, 0) * Time.deltaTime);
+        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, speed, 0) * Time.deltaTime);
         m_Rigidbody.MoveRotation(m_Rigidbody.rotation * deltaRotation);
 
     }
     public void stopSpinning()
     {
         stopped = true; 
+    }
+
+    public void resetGameObject()
+    {
+        stopped = false;
+        speed = spinSpeed; 
     }
 }

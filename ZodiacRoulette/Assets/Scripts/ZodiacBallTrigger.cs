@@ -14,7 +14,7 @@ public class ZodiacBallTrigger : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("Ball") && !GameManager.Instance.signActivated)
+        if(other.CompareTag("Ball") && GameManager.Instance.currentState == GameState.Throwing)
         {
             ballStayDuration += Time.deltaTime;  
             if(ballStayDuration >= GameManager.Instance.signActivationSeconds)
@@ -26,7 +26,7 @@ public class ZodiacBallTrigger : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Ball") && !GameManager.Instance.signActivated)
+        if(other.CompareTag("Ball") && GameManager.Instance.currentState == GameState.Throwing)
         {
             ballStayDuration = 0; 
         }
