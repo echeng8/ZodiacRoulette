@@ -194,7 +194,7 @@ public class GameManager : Singleton<GameManager>
     IEnumerator IntroThrowSequence()
     {
         textParticles.gameObject.SetActive(true);
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
         bool ballParticleFlag = false;
         bool trailPlexusFlag = false;
         ParticleSystem ballParticle = null;
