@@ -14,6 +14,7 @@ public class UI : MonoBehaviour
 	}
 	public void UserInput(string text)
 	{
-		m_text = text;		print(m_text);
+        m_text = text;
+
 	}
 }
