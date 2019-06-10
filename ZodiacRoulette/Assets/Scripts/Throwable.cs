@@ -11,7 +11,7 @@ using UnityEngine.Events;
 public class Throwable : Grabable, IWillReset
 {
     //note: pokeball in pogo has constant speed and follows the mouse at it; our version follows the mouse 1:1 - ec
-    public float maxThrowVelocity, minVToThrow;
+    public float maxThrowForce, minVToThrow;
     public UnityEvent OnThrow;
    
     Vector3 startingPosition;
@@ -35,7 +35,7 @@ public class Throwable : Grabable, IWillReset
         if(game.canThrow)
         {
             Vector2 inputVector = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-            throwVelocity = Mathf.Clamp01((inputVector).magnitude) * maxThrowVelocity;
+            throwVelocity = Mathf.Clamp01((inputVector).magnitude) * maxThrowForce;
             if(!holding)
                 _timer += Time.deltaTime;
             if (_timer > timeTilRevealTargeter)
@@ -62,7 +62,7 @@ public class Throwable : Grabable, IWillReset
         {
             if (throwVelocity > minVToThrow)
             {
-                Vector3 throwDirection = (transform.forward + (new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0))).normalized;
+                Vector3 throwDirection = (Vector3.forward + (new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0))).normalized;
                 GetComponent<Rigidbody>().AddForce(throwDirection * throwVelocity);
                 GetComponent<Rigidbody>().useGravity = true;
                 grabbable = false;

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Linq;
+using System; 
 
 public enum Sign {Aquarius, Pisces, Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn}
 public enum GameState {Asking, Throwing, Displaying} 
@@ -15,21 +16,10 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public int signActivationSeconds;
     public bool canThrow;
-    public GameState currentState;  
+    public GameState currentState;
     public UnityEvent OnGameRestart;
-
-	public Canvas Aqua;
-	public Canvas Pisc;
-	public Canvas Arie;
-	public Canvas Taur;
-	public Canvas Gemi;
-	public Canvas Canc;
-	public Canvas Leo;
-	public Canvas Virg;
-	public Canvas Libr;
-	public Canvas Scor;
-	public Canvas Sagi;
-	public Canvas Capr;
+    public Sign activatedSign;
+    public Dictionary<string, string> fortuneText;
 
     [SerializeField] GameObject textParticles;
     [SerializeField] GameObject environmentPlexus;
@@ -42,11 +32,14 @@ public class GameManager : Singleton<GameManager>
     Vector3 roulettePos;
 
     bool introFlag = true;
+
     
 	private new void Awake()
     {
+        
         base.Awake();
-        currentState = GameState.Asking;  
+        currentState = GameState.Asking;
+        LoadFortunes();
     }
 
     private void Start()
@@ -59,85 +52,11 @@ public class GameManager : Singleton<GameManager>
     {
         //placeholder
         Debug.Log("LANDED ON: " + s);
-        switchState(GameState.Displaying); 
 
-		switch (s)
-		{
-			case Sign.Aquarius:
-				{
-					if(Aqua!= null)
-						Aqua.enabled = true;
-					break;
-				}
-			case Sign.Aries:
-				{
-					if(Arie!= null)
-						Arie.enabled = true;
-					break;
-				}
-			case Sign.Cancer:
-				{
-					if (Canc != null)
-						Canc.enabled = true;
-					break;
-				}
-			case Sign.Capricorn:
-				{
-					if (Capr != null)
-						Capr.enabled = true;
-					break;
-				}
-			case Sign.Gemini:
-				{
-					if (Gemi != null)
-						Gemi.enabled = true;
-					break;
-				}
-			case Sign.Leo:
-				{
-					if (Leo != null)
-						Leo.enabled = true;
-					break;
-				}
-			case Sign.Libra:
-				{
-					if (Libr != null)
-						Libr.enabled = true;
-					break;
-				}
-			case Sign.Pisces:
-				{
-					if (Pisc != null)
-						Pisc.enabled = true;
-					break;
-				}
-			case Sign.Sagittarius:
-				{
-					if (Sagi != null)
-						Sagi.enabled = true;
-					break;
-				}
-			case Sign.Scorpio:
-				{
-					if (Scor != null)
-						Scor.enabled = true;
-					break;
-				}
-			case Sign.Taurus:
-				{
-					if (Taur != null)
-						Taur.enabled = true;
-					break;
-				}
-			case Sign.Virgo:
-				{
-					if (Virg != null)
-						Virg.enabled = true;
-					break;
-				}
-		}
-
-	} 
+        activatedSign = s; 
+        switchState(GameState.Displaying);
+        
+    }
 
     public void switchState(GameState state)
     {
@@ -163,7 +82,7 @@ public class GameManager : Singleton<GameManager>
                     ball.GetComponentInChildren<ParticleSystem>().Stop();
                     introFlag = true;
                 }
-                //GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(0);
+                GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(0);
                 break;
             case GameState.Throwing:
                 if (introFlag)
@@ -175,7 +94,6 @@ public class GameManager : Singleton<GameManager>
                     canThrow = true;
                 break;
             case GameState.Displaying:
-                //todo remove need for scene reloading and make this a variable reference
                 GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(2); 
                 break; 
         }
@@ -227,5 +145,20 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(4);
         canThrow = true;
         ball.GetComponent<Throwable>().grabbable = true;
+    }
+
+    /// <summary>
+    /// Initializes the fortuneText dictionary from entries in FortuneText.txt in the resources folder. 
+    /// </summary>
+    void LoadFortunes()
+    {
+        fortuneText = new Dictionary<string, string>(); 
+        TextAsset rawText = Resources.Load("FortuneText") as TextAsset;
+
+        foreach (string entry in rawText.text.Split(new string[] { "\r\n\r\n"}, StringSplitOptions.RemoveEmptyEntries))
+        {
+            entry.Split(new string[] { "\r\n" }, StringSplitOptions.None).Destructure(out string sign, out string text);
+            fortuneText.Add(sign.TrimEnd(new[] {':',' '}), text);
+        }
     }
 }
