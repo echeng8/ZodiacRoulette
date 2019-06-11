@@ -50,9 +50,6 @@ public class GameManager : Singleton<GameManager>
 
     public void activateSign(Sign s)
     {
-        //placeholder
-        Debug.Log("LANDED ON: " + s);
-
         activatedSign = s; 
         switchState(GameState.Displaying);
         

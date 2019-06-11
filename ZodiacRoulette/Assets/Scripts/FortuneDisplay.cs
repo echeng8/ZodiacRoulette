@@ -11,11 +11,11 @@ public class FortuneDisplay : MonoBehaviour
 {
     [SerializeField] Text sign, textDisplay;
 
-    private void Start()
+    private void OnEnable()
     {
-        Sign activeSign = GameManager.Instance.activatedSign; 
+        Debug.Log("redid");
+        Sign activeSign = GameManager.Instance.activatedSign;
         textDisplay.text = GameManager.Instance.fortuneText[activeSign.ToString()];
-        sign.text = activeSign.ToString(); 
-        
+        sign.text = activeSign.ToString();
     }
 }
