@@ -17,9 +17,12 @@ public class Throwable : Grabable, IWillReset
     Vector3 startingPosition;
     float throwVelocity;
 
-    [SerializeField] GameObject targeter;
+    [SerializeField] GameObject targeter; 
     [SerializeField] float timeTilRevealTargeter = 5f;
     [SerializeField] float _timer = 0;
+
+    [SerializeField] Transform throwTarget; 
+
     GameManager game;
 
     [SerializeField] bool holding;
@@ -62,7 +65,7 @@ public class Throwable : Grabable, IWillReset
         {
             if (throwVelocity > minVToThrow)
             {
-                Vector3 throwDirection = (Vector3.forward + (new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0))).normalized;
+                Vector3 throwDirection = ((throwTarget.position - transform.position).normalized + Quaternion.Euler(45, 0, 0) * (new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0))).normalized;
                 GetComponent<Rigidbody>().AddForce(throwDirection * throwVelocity);
                 GetComponent<Rigidbody>().useGravity = true;
                 grabbable = false;
