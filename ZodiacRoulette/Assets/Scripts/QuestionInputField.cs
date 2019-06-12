@@ -7,6 +7,7 @@ public class QuestionInputField : MonoBehaviour, IWillReset
 {
     InputField inputField;
     CanvasGroup canvasGroup;
+
     private void Awake()
     {
         inputField = GetComponent<InputField>();
