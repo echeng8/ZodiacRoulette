@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Animator rouletteAnim;
     [SerializeField] Material ballMatLit;
     [SerializeField] Material ballMatDark;
-
+    [SerializeField] GameObject restartUI;
     [SerializeField] GameObject roulette;
     Vector3 roulettePos;
 
@@ -52,7 +52,7 @@ public class GameManager : Singleton<GameManager>
     {
         activatedSign = s; 
         switchState(GameState.Displaying);
-        
+        restartUI.SetActive(true);
     }
 
     public void switchState(GameState state)
@@ -78,6 +78,7 @@ public class GameManager : Singleton<GameManager>
                     ball.GetComponent<Throwable>().grabbable = false;
                     ball.GetComponentInChildren<ParticleSystem>().Stop();
                     introFlag = true;
+                    restartUI.SetActive(false);
                 }
                 GameObject.FindGameObjectWithTag("Main Canvas").transform.Find("Menus").ToggleChildren(0);
                 break;
@@ -139,9 +140,6 @@ public class GameManager : Singleton<GameManager>
         textParticles.gameObject.SetActive(false);
         yield return Fader.instance.FadeIn(2);
         rouletteAnim.Play("DropRoulette");
-        yield return new WaitForSeconds(4);
-        canThrow = true;
-        ball.GetComponent<Throwable>().grabbable = true;
     }
 
     /// <summary>
